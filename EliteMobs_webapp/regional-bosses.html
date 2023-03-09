@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<!-- JQuery for woosh -->
+<script
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"></script>
+
+<!-- CSS only -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+<!-- JS, Popper.js, and jQuery
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+<!-- Multiple Select JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/multiple-select-js/dist/css/multiple-select.css">
+<script src="https://cdn.jsdelivr.net/npm/multiple-select-js/dist/js/multiple-select.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="css/webapp.css">
+<script src="js/libdownload.js"></script>
+<script src="js/webapp.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/custom-bosses.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>EliteMobs网页应用</title>
+</head>
+<body>
+
+<div class="jumbotron">
+    <h1 class="display-4">EliteMobs网页编辑器</h1>
+    <p class="lead">快速创建自定义Boss、区域Boss、自定义物品和宝箱！</p>
+    <hr class="my-4">
+    <p>请选择你想要创建的文件类型：</p>
+    <p class="lead">
+    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link" data-toggle="tab" href="custom-bosses.html" role="tab"
+           aria-controls="nav-home" aria-selected="true">自定义 Boss</a>
+        <a class="nav-item nav-link active" id="active-tab" data-toggle="tab" href="regional-bosses.html" role="tab"
+           aria-controls="nav-profile" aria-selected="false">区域 Boss</a>
+        <a class="nav-item nav-link" data-toggle="tab" href="custom-items.html" role="tab"
+           aria-controls="nav-profile" aria-selected="false">自定义物品</a>
+        <a class="nav-item nav-link" data-toggle="tab" href="treasure-chests.html" role="tab"
+           aria-controls="nav-profile" aria-selected="false">宝箱</a>
+    </div>
+</div>
+
+
+<div class="main-container card border-primary mb-3 container col-5">
+    <form autocomplete="off" action="#" onsubmit="event.preventDefault(); generateRegionalBoss();">
+        <div class="form-group">
+
+            <h3 class="card-header">
+                创建一个<a href="https://github.com/MagmaGuy/EliteMobs/wiki/[Guide]-Creating-World-Bosses">区域
+                Boss</a>！
+            </h3>
+
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="isEnabled">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置是否启用boss"
+                           onclick="customBossLinkFactory('isEnabled')">
+                            Enabled:</a></label>
+                    <div class="container col-sm-8">
+                        <select class="form-control required-field" id="isEnabled"
+                                data-toggle="tooltip" data-placement="right" title="必填选项">
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+
+                    <label for="entityType" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss的实体类型。必须使用API值，点击
+                            链接查看有效值！" onclick="customBossLinkFactory('entityType')">实体
+                            类型: </a>
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;" data-toggle="tooltip"
+                             data-placement="right"
+                             title="点击查看有效值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/EntityType.html')"></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control required-field" id="entityType" placeholder="ZOMBIE"
+                               required
+                               data-toggle="tooltip" data-placement="right" title="必填选项">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="name" class="col-sm-4 col-form-label">
+                        <a href="Name:" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss显示名"
+                           onclick="customBossLinkFactory('name')">名称</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control required-field" id="name" placeholder="boss名"
+                               required
+                               data-toggle="tooltip" data-placement="right" title="必填选项">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="level" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss等级"
+                           onclick="customBossLinkFactory('level')">等级:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="level" placeholder="dynamic">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="timeout" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss多久后自动消失(单位为分钟)."
+                           onclick="customBossLinkFactory('timeout')">消失时间 (分钟):</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="timeout" placeholder="30">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="healthMultiplier" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss的血量倍数(0.X更低，X.Y更高)"
+                           onclick="customBossLinkFactory('healthMultiplier')">血量倍数:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="healthMultiplier"
+                               placeholder="1.0">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="damageMultiplier" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss的伤害倍数(0.X更低，X.Y更高)"
+                           onclick="customBossLinkFactory('damageMultiplier')">伤害倍数:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="damageMultiplier"
+                               placeholder="1.0">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="helmet" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss的头盔材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('helmet')">Helmet:</a>
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;"
+                             data-toggle="tooltip"
+                             data-placement="right"
+                             title="点击查看有效值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="helmet" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="chestplate" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss的胸甲材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('chestplate')">Chestplate:</a>
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;"
+                             data-toggle="tooltip"
+                             data-placement="right"
+                             title="点击查看有效值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="chestplate" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="leggings" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss的护腿材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('leggings')">护腿:</a>
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;" data-toggle="tooltip"
+                             data-placement="right"
+                             title="点击查看有效值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="leggings" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="boots" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss的鞋子材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('boots')">Boots:
+                        </a> <img src="img/link_white.png" alt="link" style="width:15px;height:15px;"
+                                  data-toggle="tooltip"
+                                  data-placement="right"
+                                  title="点击查看有效值！"
+                                  onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="boots" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="mainHand" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss主手材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('mainHand')">主手:
+                        </a><img src="img/link_white.png" alt="link" style="width:15px;height:15px;"
+                                 data-toggle="tooltip"
+                                 data-placement="right"
+                                 title="点击查看有效值！"
+                                 onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="mainHand" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="offHand" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss副手材料。需要一个有效的spigot
+                           api材料名，点击链接查看有效名称！"
+                           onclick="customBossLinkFactory('offHand')">副手:
+                        </a><img src="img/link_white.png" alt="link" style="width:15px;height:15px;"
+                                 data-toggle="tooltip"
+                                 data-placement="right"
+                                 title="点击查看有效值！"
+                                 onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="offHand" placeholder="AIR">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="isBaby">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！ Sets whether the boss is a baby, for valid entities."
+                           onclick="customBossLinkFactory('isBaby')">Is Baby:</a></label>
+                    <div class="container col-sm-8">
+                        <select class="form-control" id="isBaby">
+                            <option></option>
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="powers" class="col-sm-4 cold-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss能力"
+                           onclick="customBossLinkFactory('powers')">能力:</a></label>
+                    <div class="container col-sm-8">
+                        <select id="powers" multiple>
+                            <option class="test" value="attack_arrow.yml">飞箭</option>
+                            <option value="attack_blinding.yml">致盲</option>
+                            <option value="attack_confusing.yml">迷惑</option>
+                            <option value="attack_fire.yml">燔祭</option>
+                            <option value="attack_fireball.yml">火球术</option>
+                            <option value="attack_freeze.yml">冰寒</option>
+                            <option value="attack_gravity.yml">飞升</option>
+                            <option value="attack_lightning.yml">雷击</option>
+                            <option value="attack_poison.yml">赐毒</option>
+                            <option value="attack_push.yml">击退</option>
+                            <option value="attack_vacuum.yml">真空</option>
+                            <option value="attack_weakness.yml">虚弱</option>
+                            <option value="attack_web.yml">困兽之网</option>
+                            <option value="attack_wither.yml">凋零</option>
+                            <option value="bonus_loot.yml">天赐</option>
+                            <option value="bullet_hell.yml">弹幕地狱</option>
+                            <option value="corpse.yml">遗尸</option>
+                            <option value="flame_pyre.yml">火堆</option>
+                            <option value="flamethrower.yml">喷火</option>
+                            <option value="gold_explosion.yml">黄金霰弹枪</option>
+                            <option value="gold_shotgun.yml">黄金爆炸</option>
+                            <option value="hyper_loot.yml">神赐</option>
+                            <option value="implosion.yml">聚爆</option>
+                            <option value="invisibility.yml">隐身</option>
+                            <option value="invulnerability_arrow.yml">疫箭</option>
+                            <option value="invulnerability_fall_damage.yml">羽落</option>
+                            <option value="invulnerability_fire.yml">烈火之御</option>
+                            <option value="invulnerability_knockback.yml">击退免疫</option>
+                            <option value="meteor_shower.yml">星陨</option>
+                            <option value="moonwalk.yml">月步</option>
+                            <option value="movement_speed.yml">移速</option>
+                            <option value="skeleton_pillar.yml">骨柱</option>
+                            <option value="skeleton_tracking_arrow.yml">逐影箭</option>
+                            <option value="spirit_walk.yml">灵魂漫步</option>
+                            <option value="summon_embers.yml">召唤余烬</option>
+                            <option value="summon_raug.yml">召唤拉格</option>
+                            <option value="summon_the_returned.yml">召唤尸魂归来</option>
+                            <option value="taunt.yml">嘲讽</option>
+                            <option value="zombie_bloat.yml">膨胀</option>
+                            <option value="zombie_friends.yml">僵尸朋友</option>
+                            <option value="zombie_necronomicon.yml">死灵法师</option>
+                            <option value="zombie_parents.yml">僵尸父母</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="summonPowers" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss可召唤的援军。"
+                           onclick="customBossLinkFactory('summonPower')">召唤能力:</a></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control summonPowers" id="summonPowers"
+                               placeholder="summon:once:文件名.yml">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="spawnMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss生成时发送给玩家或discord的消息"
+                           onclick="customBossLinkFactory('spawnMessage')">生成消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="spawnMessage"
+                               placeholder="A test boss has been spawned!">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="deathMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss死亡时发送给玩家或discord的消息"
+                           onclick="customBossLinkFactory('deathMessage')">死亡消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="deathMessage"
+                               placeholder="boss被$players杀死了！">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="escapeMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss逃跑时发送给玩家的消息"
+                           onclick="customBossLinkFactory('escapeMessage')">逃脱消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="escapeMessage"
+                               placeholder="boss已逃跑！">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="locationMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置当玩家与boss战斗
+                            或追踪boss时的bossbar文本"
+                           onclick="customBossLinkFactory('locationMessage')">位置消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="locationMessage"
+                               placeholder="实体位置: $location">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="uniqueLootList" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss可召唤的援军"
+                           onclick="customBossLinkFactory('summonPower')">Unique Loot List:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control uniqueLootList" id="uniqueLootList"
+                               placeholder="magmaguys_toothpick.yml:1">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="dropsEliteMobsLoot">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss是否掉落精英怪物战利品"
+                           onclick="customBossLinkFactory('dropsEliteMobsLoot')">掉落精英怪物战利品:</a></label>
+                    <div class="container col-sm-8">
+                        <select class="form-control" id="dropsEliteMobsLoot">
+                            <option></option>
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="dropsVanillaLoot">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss是否掉落原版战利品"
+                           onclick="customBossLinkFactory('dropsVanillaLoot')">掉落原版战利品:</a></label>
+                    <div class="container col-sm-8">
+                        <select class="form-control" id="dropsVanillaLoot">
+                            <option></option>
+                            <option>true</option>
+                            <option>false</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="trails" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss轨迹"
+                           onclick="customBossLinkFactory('trails')">轨迹:</a>
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;" data-toggle="tooltip"
+                             data-placement="top"
+                             title="点击查看有效的粒子值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html')">
+                        <img src="img/link_white.png" alt="link" style="width:15px;height:15px;" data-toggle="tooltip"
+                             data-placement="top"
+                             title="点击查看有效的物品值！"
+                             onclick="window.open('https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html')">
+                    </label>
+                    <div class=" col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="trails" placeholder="PORTAL">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="onDamageMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss击中玩家时发送的消息"
+                           onclick="customBossLinkFactory('onDamageMessage')">击中消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="onDamageMessage" placeholder="我打中你了！">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="onDamagedMessage" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss被玩家击中时发出的消息"
+                           onclick="customBossLinkFactory('onDamagedMessage')">受伤消息:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="onDamagedMessage" placeholder="你打中我了！">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="spawnChance" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置同类型精英怪物生成时
+                           变为boss的几率"
+                           onclick="customBossLinkFactory('spawnChance')">生成率:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="spawnChance" placeholder="0.0">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="mountEntity" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置骑在boss头上的实体。
+                            可以是Spigot API的实体或另一个boss的文件名。"
+                           onclick="customBossLinkFactory('mountEntity')">骑乘实体:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="mountEntity" placeholder="HORSE">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label" for="announcementPriority">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss的公告优先度。0为无声，1为聊天，
+                            2 为位置，3为discord消息"
+                           onclick="customBossLinkFactory('announcementPriority')">公告优先度:</a></label>
+                    <div class="container col-sm-8">
+                        <select class="form-control" id="announcementPriority">
+                            <option></option>
+                            <option>0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="followDistance" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss的跟随距离。"
+                           onclick="customBossLinkFactory('followDistance')">跟随距离:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="followDistance" placeholder="30">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="onDeathCommands" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip"
+                           data-placement="left"
+                           title="点击查看wiki条目！设置boss死亡时运行的指令。占位符：
+                            $players"
+                           onclick="customBossLinkFactory('onDeathCommands')">死亡运行指令:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="onDeathCommands"
+                               placeholder="broadcast $players杀死了$level级的$name！">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="spawnCooldown" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss重生时间"
+                           onclick="regionalBossLinkFactory('spawnCooldown')">生成冷却 (分钟):</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="spawnCooldown" placeholder="30">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="leashRadius" class="col-sm-4 col-form-label">
+                        <a href="#" data-toggle="tooltip" data-placement="left"
+                           title="点击查看wiki条目！设置boss离重生点的最远距离"
+                           onclick="regionalBossLinkFactory('spawnCooldown')">束缚范围:</a></label>
+                    <div class="col-sm-8 autocomplete">
+                        <input type="text" class="form-control" id="leashRadius" placeholder="30">
+                    </div>
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary " id="generate">
+                    生成！
+                </button>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="output" class="card border-primary mb-3 container col-3">
+
+</div>
+
+</body>
+<!-- Footer -->
+<footer id="footer" class="page-footer font-small pt-4">
+
+    <!-- Footer Links -->
+    <div class="container-fluid text-center text-md-left">
+
+        <!-- Grid row -->
+        <div class="row">
+
+            <!-- Grid column -->
+            <div class="col-md-6 mt-md-0 mt-3">
+
+                <!-- Content -->
+                <h5 class="text-uppercase">制作者：MagmaGuy，译者：qsefthuopq</h5>
+                <p>如果你喜欢我的作品，欢迎在我的<a
+                        href="https://www.patreon.com/magmaguy">Patreon</a>上捐赠！</p>
+
+            </div>
+            <!-- Grid column -->
+
+        </div>
+        <!-- Grid row -->
+
+    </div>
+    <!-- Footer Links -->
+</footer>
+</html>

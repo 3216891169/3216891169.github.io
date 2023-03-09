@@ -1,2 +1,2 @@
-# 3216891169.github.io
-.
+# magmaguy.com_zh_cn
+Translated all the .html files
